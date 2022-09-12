@@ -1,0 +1,39 @@
+pipeline{
+    agent any
+    tools{
+        terraform 'terraform'
+    }
+    stages {
+        stage ("git credintial") {
+            steps {
+            git branch: 'main', credentialsId: 'a72afead-e482-434a-b3b8-4e613f9c360b', url: 'https://github.com/uditkmahajan/jenkin.git'
+                 }
+        }
+        stage ("terraform init") {
+            steps {
+            sh 'terraform init --reconfigure'
+                 }
+        }
+        stage ("terraform formate") {
+            steps {
+            sh 'terraform fmt'
+                 }
+        }
+        stage ('terraform vaidate') {
+          steps{
+            sh 'terraform validate'
+                }
+        }
+        stage ('terraform planning') {
+          steps{
+            sh 'terraform plan'
+                }
+        }
+        stage ('terraform apply') {
+          steps{
+            sh 'terraform apply -auto-approve'
+                }
+        }
+    
+    }
+}
